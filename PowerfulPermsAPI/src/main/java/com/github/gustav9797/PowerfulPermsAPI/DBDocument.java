@@ -1,6 +1,8 @@
 package com.github.gustav9797.PowerfulPermsAPI;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -34,7 +36,20 @@ public class DBDocument {
     }
 
     public Timestamp getTimeStamp(String key) {
-        return (Timestamp) data.get(key);
+        Object timeObject = data.get(key);
+        if (timeObject == null) {
+            return null;
+        }
+        if (timeObject instanceof Timestamp) {
+            return (Timestamp) timeObject;
+        }
+
+        LocalDateTime localDateTime = (LocalDateTime) timeObject;
+        if (localDateTime == null) {
+            return null;
+        }
+
+        return Timestamp.valueOf(localDateTime);
     }
 
     public Date getDate(String key) {
